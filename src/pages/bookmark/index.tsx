@@ -1,60 +1,79 @@
-// pages/bookmark/index.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMovieContext } from "../../context/movie-context";
 import { MovieDataType } from "../../assets/data";
+import MovieCard from "../../components/movie-card"; // Use your current MovieCard component
+import { Box, Typography } from "@mui/material";
 
-const BookmarkPage = () => {
-  const { state } = useMovieContext(); // Access state from context
-  const { movies } = state;
+const Bookmark = () => {
+  const { state } = useMovieContext();
+  const { movies = [] } = state;
 
   const [search, setSearch] = useState("");
   const [searchList, setSearchList] = useState<MovieDataType[]>([]);
 
-  // Filter for movies that are bookmarked
+  // Filter for bookmarked movies
   const bookmarks = movies.filter((movie) => movie.isBookmarked);
 
-  // Handle the search input and filter the bookmarked movies
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value;
     setSearch(searchTerm);
 
-    // Filter based on search term in movie title
     const filteredList = bookmarks.filter((movie) =>
       movie.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchList(filteredList);
   };
 
-  useEffect(() => {
-    // If no bookmarks are present, you could show a message or something
-    if (bookmarks.length === 0 && search === "") {
-      console.log("No bookmarked movies.");
-    }
-  }, [bookmarks, search]);
-
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search bookmarks..."
-        value={search}
-        onChange={handleSearch}
-        style={{ padding: "10px", width: "100%", marginBottom: "20px" }}
-      />
-      <div>
-        {search
-          ? searchList.length > 0
-            ? searchList.map((movie) => <div key={movie.id}>{movie.title}</div>)
-            : "No results found"
-          : bookmarks.length > 0
-          ? bookmarks.map((movie) => <div key={movie.id}>{movie.title}</div>)
-          : "No bookmarks found"}
-      </div>
-    </div>
+    <Box px={3} py={5} sx={{ backgroundColor: "#10141f", minHeight: "100vh" }}>
+      {/* Search Bar */}
+      <Box sx={{ mb: 4 }}>
+        <input
+          type="text"
+          placeholder="Search bookmarks..."
+          value={search}
+          onChange={handleSearch}
+          style={{
+            padding: "10px",
+            width: "100%",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            fontSize: "16px",
+          }}
+        />
+      </Box>
+
+      {/* Bookmark Results */}
+      {search && searchList.length === 0 && (
+        <Typography color="white" variant="h6" textAlign="center">
+          No results found.
+        </Typography>
+      )}
+      {!search && bookmarks.length === 0 && (
+        <Typography color="white" variant="h6" textAlign="center">
+          No bookmarks found.
+        </Typography>
+      )}
+
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "20px",
+          justifyContent: searchList.length > 0 || bookmarks.length > 0 ? "flex-start" : "center",
+        }}
+      >
+        {(search ? searchList : bookmarks).map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
+        ))}
+      </Box>
+    </Box>
   );
 };
 
-export default BookmarkPage;
+export default Bookmark;
+
+
 
 
 

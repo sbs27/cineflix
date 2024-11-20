@@ -28,8 +28,8 @@ export const router = createBrowserRouter([
     path: "/bookmark",
     element: <Bookmark />,
   },
-  {
-    path: "*",
-    element: <Error />,
-  },
+  // {
+  //   path: "*",
+  //   element: <Error />,
+  // },
 ]);
