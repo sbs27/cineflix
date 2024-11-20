@@ -5,6 +5,7 @@ import Movie from "./pages/movie";
 import TvSeries from "./pages/tv-series";
 import Error from "./pages/error";
 import Home from "./pages/home";
+import Bookmark from "./pages/bookmark";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
   {
     path: "/tv-series",
     element: <TvSeries />,
+  },
+  {
+    path: "/bookmark",
+    element: <Bookmark />,
   },
   {
     path: "*",

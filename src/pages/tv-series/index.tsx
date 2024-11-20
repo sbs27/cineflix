@@ -9,8 +9,11 @@ const TVSeriesPage = () => {
   const [search, setSearch] = useState("");
   const [searchList, setSearchList] = useState<MovieDataType[]>([]);
 
-  // Access movies from the context
-  const { state: { movies } } = useMovieContext();
+  // Access movies and dispatch from the context
+  const {
+    state: { movies },
+    dispatch,
+  } = useMovieContext();
 
   // Filter TV series
   const tvSeries = movies.filter((movie: MovieDataType) => movie.category === "TV Series");
@@ -26,6 +29,11 @@ const TVSeriesPage = () => {
       setSearchList(filtered);
     }
   }, [search, tvSeries]);
+
+  // Bookmark toggle handler
+  const handleBookmark = (id: string) => {
+    dispatch({ type: "TOGGLE_BOOKMARK", id });
+  };
 
   return (
     <Layout>
@@ -44,11 +52,13 @@ const TVSeriesPage = () => {
             marginBottom: "20px",
           }}
         />
-        <MovieList recommendList={searchList} />
+        {/* Pass handleBookmark to MovieList */}
+        <MovieList recommendList={searchList} onBookmark={handleBookmark} />
       </Box>
     </Layout>
   );
 };
 
 export default TVSeriesPage;
+
 

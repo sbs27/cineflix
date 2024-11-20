@@ -5,47 +5,36 @@ import MovieList from "../../components/movie-list";
 import { MovieDataType } from "../../assets/data";
 import { useMovieContext } from "../../context/movie-context";
 
-const MoviesPage = () => {
-  const [search, setSearch] = useState("");
+
+const MoviePage = () => {
   const [filteredMovies, setFilteredMovies] = useState<MovieDataType[]>([]);
 
-  // Access movies from the context
-  const { state: { movies } } = useMovieContext();
+  const { state: { movies, user }, dispatch } = useMovieContext();
 
-  // Update filtered movies based on search
+  // Filter movies for "recommendation"
+  const recommendList = movies.filter((movie: MovieDataType) => !movie.isTrending);
+
+  // Handle bookmark toggling
+  const handleBookmark = (id: string) => {
+    dispatch({ type: "TOGGLE_BOOKMARK", id });
+  };
+
+  // Filter movies based on search input or other criteria
   useEffect(() => {
-    if (search === "") {
-      setFilteredMovies(movies); // Show all movies if search is empty
-    } else {
-      const filtered = movies.filter((movie: MovieDataType) =>
-        movie.title.toLowerCase().includes(search.toLowerCase())
-      );
-      setFilteredMovies(filtered);
-    }
-  }, [search, movies]);
+    // Set filtered movies for recommendations (or based on search logic)
+    setFilteredMovies(recommendList);  // or implement other filters here
+  }, [movies]);
 
   return (
-    <Layout>
-      <Box>
-        <Typography variant="h5" component="h1" my={6} fontWeight={400}>
-          Movies
-        </Typography>
-        <input
-          type="text"
-          placeholder="Search movies..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "10px",
-            width: "100%",
-            marginBottom: "20px",
-          }}
-        />
-        <MovieList recommendList={filteredMovies} />
-      </Box>
-    </Layout>
+    <Box>
+      <Typography variant="h5" component="h1" my={6} fontWeight={400}>
+        Recommended Movies
+      </Typography>
+      <MovieList recommendList={filteredMovies} onBookmark={handleBookmark} />
+    </Box>
   );
 };
 
-export default MoviesPage;
+export default MoviePage;
+
 

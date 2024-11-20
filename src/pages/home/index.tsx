@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../Layout";
-import {
-  Box,
-  Paper,
-  InputBase,
-  InputAdornment,
-  Typography,
-} from "@mui/material";
-import SearchIcon from "../../assets/icons/icon-search.svg"; // Ensure this file exists
+import { Box, Paper, InputBase, InputAdornment, Typography } from "@mui/material";
+import SearchIcon from "../../assets/icons/icon-search.svg";
 import MovieTrendList from "../../components/movie-list/movieTrendList";
-import MovieList from "../../components/movie-list";
+import MovieList from "../../components/movie-list"; // Ensure this import is correct
 import { MovieDataType } from "../../assets/data";
 import { useMovieContext } from "../../context/movie-context";
 
@@ -18,13 +12,10 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [searchList, setSearchList] = useState<MovieDataType[]>([]);
 
-  // Destructure movies from the MovieContext
-  const { state: { movies, user } } = useMovieContext();
-  
-  const navigate = useNavigate(); // For navigation
+  const { state: { movies, user }, dispatch } = useMovieContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect to login page if the user is not authenticated
     if (!user) {
       navigate("/login");
     }
@@ -41,6 +32,11 @@ const Home = () => {
       movie.title.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setSearchList(newList);
+  };
+
+  // Handle bookmark toggle
+  const handleBookmark = (id: string) => {
+    dispatch({ type: "TOGGLE_BOOKMARK", id }); // Dispatch the toggle bookmark action
   };
 
   return (
@@ -80,28 +76,25 @@ const Home = () => {
           />
         </Paper>
       </Box>
+
       <Box py={2} px={4}>
         {search === "" ? (
           <Box width="100%">
-            <Box width="100%">
-              <Typography variant="h5" component="h1" my={6} fontWeight={400}>
-                Trending
-              </Typography>
-              <MovieTrendList trendingList={trendingList} />
-            </Box>
-            <Box width="100%">
-              <Typography variant="h5" component="h1" my={6} fontWeight={400}>
-                Recommended For You
-              </Typography>
-              <MovieList recommendList={recommendList} />
-            </Box>
+            <Typography variant="h5" component="h1" my={6} fontWeight={400}>
+              Trending
+            </Typography>
+            <MovieTrendList trendingList={trendingList} onBookmark={handleBookmark} />
+            <Typography variant="h5" component="h1" my={6} fontWeight={400}>
+              Recommended For You
+            </Typography>
+            <MovieList recommendList={recommendList} onBookmark={handleBookmark} />
           </Box>
         ) : (
           <Box width="100%">
             <Typography>
               Found {searchList.length} results for "{search}"
             </Typography>
-            <MovieList recommendList={searchList} />
+            <MovieList recommendList={searchList} onBookmark={handleBookmark} />
           </Box>
         )}
       </Box>
@@ -110,5 +103,7 @@ const Home = () => {
 };
 
 export default Home;
+
+
 
 

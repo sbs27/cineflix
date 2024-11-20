@@ -1,5 +1,26 @@
+/* Global Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* App Container */
 .App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Section */
+.App-header {
+  background-color: #282c34;
+  color: white;
+  padding: 20px 0;
   text-align: center;
+  flex: 0 1 80px;  /* Allow header to take up minimal height */
 }
 
 .App-logo {
@@ -7,25 +28,15 @@
   pointer-events: none;
 }
 
+.App-link {
+  color: #61dafb;
+}
+
+/* Animations for Logo */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -34,5 +45,96 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Main Content Section */
+.App-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+
+/* Movie List Styles */
+.movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.movie-item {
+  width: calc(33.333% - 20px);
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.movie-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.movie-item img {
+  width: 100%;
+  border-radius: 8px;
+  height: auto;
+}
+
+.movie-item h3 {
+  font-size: 1.1em;
+  margin-top: 10px;
+  color: #333;
+  text-align: center;
+}
+
+/* Movie Search Styles */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #10141f;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.search-container input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: #61dafb;
+}
+
+.search-container img {
+  margin-right: 10px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .movie-item {
+    width: calc(50% - 20px);  /* 2 items per row on tablets */
+  }
+
+  .movie-list {
+    gap: 15px;
+  }
+
+  .search-container input {
+    width: 90%;  /* Wider search input on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-item {
+    width: 100%;  /* 1 item per row on small screens */
   }
 }

@@ -1,25 +1,28 @@
-import React, { createContext, useContext, ReactNode, useReducer } from "react";
-import { MovieDataType } from "../assets/data"; // Import MovieDataType from assets/data
+import React, { createContext, useContext, useReducer, ReactNode } from "react";
+import { moviesData } from "../assets/data";
+import { MovieDataType } from "../assets/data";
 
-// Define the User interface
+// User interface definition
 interface User {
   email: string;
-  token: string; // Or any other info you need for the user
+  token: string;
 }
 
+// MovieState interface
 interface MovieState {
   movies: MovieDataType[];
-  user: User | null; // user can be null when not logged in
+  user: User | null;
 }
 
 type MovieAction =
   | { type: "ADD_MOVIE"; movie: MovieDataType }
   | { type: "TOGGLE_BOOKMARK"; id: string }
-  | { type: "SET_USER"; user: User | null }; // Action to set the user
+  | { type: "SET_USER"; user: User | null };
 
+// Initial state
 const initialState: MovieState = {
-  movies: [],
-  user: null, // Initial state, no user logged in
+  movies: moviesData, // Importing the default movie data
+  user: null,
 };
 
 const movieReducer = (state: MovieState, action: MovieAction): MovieState => {
@@ -36,7 +39,7 @@ const movieReducer = (state: MovieState, action: MovieAction): MovieState => {
         ),
       };
     case "SET_USER":
-      return { ...state, user: action.user }; // Set the user
+      return { ...state, user: action.user };
     default:
       return state;
   }
@@ -49,7 +52,7 @@ interface MovieContextProps {
 
 const MovieContext = createContext<MovieContextProps | undefined>(undefined);
 
-export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const MovieProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(movieReducer, initialState);
 
   return (
@@ -66,4 +69,5 @@ export const useMovieContext = (): MovieContextProps => {
   }
   return context;
 };
+
 
